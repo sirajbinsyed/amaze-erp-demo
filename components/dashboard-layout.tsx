@@ -1,62 +1,55 @@
 "use client"
 
-import type React from "react"
-import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import type { User } from "@/lib/auth"
+import { Building2, LogOut, User } from "lucide-react"
+import type { ReactNode } from "react"
 
 interface DashboardLayoutProps {
-  children: React.ReactNode
-  user: User
+  children: ReactNode
   title: string
+  role: string
 }
 
-export function DashboardLayout({ children, user, title }: DashboardLayoutProps) {
-  const router = useRouter()
-
-  const handleLogout = () => {
-    localStorage.removeItem("user")
-    router.push("/")
-  }
+export function DashboardLayout({ children, title, role }: DashboardLayoutProps) {
+  const { user, logout } = useAuth()
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="flex h-14 sm:h-16 items-center justify-between px-4 sm:px-6">
-          <div className="flex items-center gap-2 sm:gap-4 min-w-0">
-            <h1 className="text-lg sm:text-xl font-bold text-primary truncate">Framing Shop ERP</h1>
-            <span className="text-muted-foreground hidden sm:inline">|</span>
-            <h2 className="text-base sm:text-lg font-medium truncate hidden sm:block">{title}</h2>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-4">
-            <div className="flex items-center gap-2">
-              <Avatar className="h-7 w-7 sm:h-8 sm:w-8">
-                <AvatarFallback className="bg-primary text-primary-foreground text-xs sm:text-sm">
-                  {user.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </AvatarFallback>
-              </Avatar>
-              <div className="text-xs sm:text-sm hidden xs:block">
-                <p className="font-medium truncate max-w-20 sm:max-w-none">{user.name}</p>
-                <p className="text-muted-foreground capitalize">{user.role}</p>
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <Building2 className="h-8 w-8 text-blue-600 mr-3" />
+              <div>
+                <h1 className="text-xl font-semibold text-gray-900">Amaze Framing Shop</h1>
+                <p className="text-sm text-gray-500">ERP System</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={handleLogout} className="text-xs sm:text-sm bg-transparent">
-              Logout
-            </Button>
+
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <User className="h-4 w-4 text-gray-400" />
+                <span className="text-sm text-gray-700">{user?.name}</span>
+                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full capitalize">{role}</span>
+              </div>
+              <Button variant="outline" size="sm" onClick={logout}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="px-4 pb-2 sm:hidden">
-          <h2 className="text-base font-medium text-muted-foreground">{title}</h2>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="p-3 sm:p-6">{children}</main>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-gray-900">{title}</h2>
+          <p className="text-gray-600 mt-2">Welcome back, {user?.name}</p>
+        </div>
+
+        {children}
+      </main>
     </div>
   )
 }

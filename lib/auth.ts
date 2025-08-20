@@ -1,48 +1,93 @@
+export type UserRole = "admin" | "crm" | "sales" | "project" | "designer" | "printing" | "logistics"
+
 export interface User {
-  email: string
-  role: "admin" | "crm" | "sales" | "project" | "printing" | "logistics"
+  id: string
+  username: string
+  role: UserRole
   name: string
+  email: string
 }
 
-// Demo credentials as specified in requirements
-const DEMO_CREDENTIALS = [
-  { email: "admin@amaze.com", password: "admin123", role: "admin" as const, name: "Admin User" },
-  { email: "crm@amaze.com", password: "crm123", role: "crm" as const, name: "CRM Manager" },
-  { email: "sales@amaze.com", password: "sales123", role: "sales" as const, name: "Sales Rep" },
-  { email: "project@amaze.com", password: "project123", role: "project" as const, name: "Project Manager" },
-  { email: "printing@amaze.com", password: "print123", role: "printing" as const, name: "Print Operator" },
-  { email: "logistics@amaze.com", password: "logi123", role: "logistics" as const, name: "Logistics Coordinator" },
-]
-
-export function validateCredentials(email: string, password: string): User | null {
-  const user = DEMO_CREDENTIALS.find((cred) => cred.email === email && cred.password === password)
-
-  if (user) {
-    return {
-      email: user.email,
-      role: user.role,
-      name: user.name,
-    }
-  }
-
-  return null
+// Hardcoded users as per specification
+export const DEMO_USERS: Record<string, { password: string; user: User }> = {
+  admin: {
+    password: "admin123",
+    user: {
+      id: "1",
+      username: "admin",
+      role: "admin",
+      name: "System Administrator",
+      email: "admin@amazeframing.com",
+    },
+  },
+  crm_user: {
+    password: "crm123",
+    user: {
+      id: "2",
+      username: "crm_user",
+      role: "crm",
+      name: "CRM Manager",
+      email: "crm@amazeframing.com",
+    },
+  },
+  sales_user: {
+    password: "sales123",
+    user: {
+      id: "3",
+      username: "sales_user",
+      role: "sales",
+      name: "Sales Representative",
+      email: "sales@amazeframing.com",
+    },
+  },
+  project_user: {
+    password: "project123",
+    user: {
+      id: "4",
+      username: "project_user",
+      role: "project",
+      name: "Project Manager",
+      email: "project@amazeframing.com",
+    },
+  },
+  designer: {
+    password: "design123",
+    user: {
+      id: "5",
+      username: "designer",
+      role: "designer",
+      name: "Lead Designer",
+      email: "designer@amazeframing.com",
+    },
+  },
+  printing_user: {
+    password: "print123",
+    user: {
+      id: "6",
+      username: "printing_user",
+      role: "printing",
+      name: "Printing Operator",
+      email: "printing@amazeframing.com",
+    },
+  },
+  logistics_user: {
+    password: "logistics123",
+    user: {
+      id: "7",
+      username: "logistics_user",
+      role: "logistics",
+      name: "Logistics Coordinator",
+      email: "logistics@amazeframing.com",
+    },
+  },
 }
 
-export function getDashboardPath(role: string): string {
-  switch (role) {
-    case "admin":
-      return "/admin"
-    case "crm":
-      return "/crm"
-    case "sales":
-      return "/sales"
-    case "project":
-      return "/project"
-    case "printing":
-      return "/printing"
-    case "logistics":
-      return "/logistics"
-    default:
-      return "/"
-  }
+export const ROLE_PERMISSIONS = {
+  admin: ["users", "settings", "reports", "all_modules"],
+  crm: ["customers", "leads", "communications"],
+  sales: ["orders", "quotations", "customers", "inventory"],
+  project: ["projects", "tasks", "timeline", "resources"],
+  designer: ["designs", "projects", "assets", "approvals"],
+  printing: ["print_queue", "materials", "quality_control"],
+  logistics: ["shipping", "inventory", "tracking", "delivery"],
 }
